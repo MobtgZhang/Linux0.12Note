@@ -1,0 +1,23 @@
+# x86_64 工具链，仅用于 UEFI 引导链与 stub 内核。
+
+CCCOLOR="\033[34m"
+LINKCOLOR="\033[34;1m"
+SRCCOLOR="\033[33m"
+BINCOLOR="\033[37;1m"
+MAKECOLOR="\033[32;1m"
+ENDCOLOR="\033[0m"
+
+QUIET_CC = @printf '    %b %b\n' $(CCCOLOR)CC$(ENDCOLOR) $(SRCCOLOR)$@$(ENDCOLOR) 1>&2;
+QUIET_LINK = @printf '    %b %b\n' $(LINKCOLOR)LINK$(ENDCOLOR) $(BINCOLOR)$@$(ENDCOLOR) 1>&2;
+QUIET_INSTALL = @printf '    %b %b\n' $(LINKCOLOR)INSTALL$(ENDCOLOR) $(BINCOLOR)$@$(ENDCOLOR) 1>&2;
+
+AS	= $(QUIET_CC)as --64
+LD	= $(QUIET_LINK)ld
+LDFLAGS = -m elf_x86_64
+CC	= $(QUIET_CC)gcc
+CFLAGS	= -O0 -g3 -gdwarf-2 -m64 -mno-red-zone -fstrength-reduce -fomit-frame-pointer \
+	  -fno-stack-protector -fno-builtin -ffreestanding -fno-pie
+
+CPP	= cpp -nostdinc
+AR	= $(QUIET_LINK)ar
+CPP_DISPLAY = $(QUIET_CC)cpp -nostdinc
